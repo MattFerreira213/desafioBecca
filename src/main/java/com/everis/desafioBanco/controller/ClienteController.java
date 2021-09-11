@@ -7,14 +7,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-public class ClienteControler {
+public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
@@ -25,6 +23,27 @@ public class ClienteControler {
         BeanUtils.copyProperties(clienteDto, dadosCliente);
         clienteService.cadastrarCliente(dadosCliente);
         return new ResponseEntity<>(dadosCliente, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/listar-cliente")
+    public ResponseEntity<Cliente> listarCLiente(@RequestParam(name = "cpf") String cpf){
+        var cliente = clienteService.listarCliente(cpf);
+        return new ResponseEntity<>(cliente, HttpStatus.OK);
+    }
+
+    @PutMapping("/atualizar-cliente")
+    public ResponseEntity<Cliente> atualizarCliente(@RequestBody @Valid ClienteDto clienteDto,
+                                                    @RequestParam(name = "cpf") String cpf){
+        var cliente = clienteService.listarCliente(cpf);
+        BeanUtils.copyProperties(clienteDto, cliente);
+        clienteService.atualizarCliente(cliente, cpf);
+        return new ResponseEntity<>(cliente, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deletar-cliente")
+    public ResponseEntity<?> deletarCliente(@RequestParam(name = "cpf") String cpf){
+        clienteService.deletarCliente(cpf);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 }
