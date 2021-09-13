@@ -1,9 +1,8 @@
-package com.everis.desafioBanco.controller;
+package com.everis.desafioBanco.Controller;
 
-import com.everis.desafioBanco.dto.ContaDto;
-import com.everis.desafioBanco.model.Cliente;
-import com.everis.desafioBanco.model.Conta;
-import com.everis.desafioBanco.service.ContaService;
+import com.everis.desafioBanco.Dto.ContaDto;
+import com.everis.desafioBanco.Model.Conta;
+import com.everis.desafioBanco.Service.ContaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

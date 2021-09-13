@@ -1,4 +1,4 @@
-package com.everis.desafioBanco.dto;
+package com.everis.desafioBanco.Dto;
 
 import lombok.Data;
 

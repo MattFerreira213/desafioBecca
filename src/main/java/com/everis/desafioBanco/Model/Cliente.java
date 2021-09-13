@@ -1,4 +1,4 @@
-package com.everis.desafioBanco.model;
+package com.everis.desafioBanco.Model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

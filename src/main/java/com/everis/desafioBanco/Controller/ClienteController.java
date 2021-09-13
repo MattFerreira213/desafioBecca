@@ -1,8 +1,8 @@
-package com.everis.desafioBanco.controller;
+package com.everis.desafioBanco.Controller;
 
-import com.everis.desafioBanco.dto.ClienteDto;
-import com.everis.desafioBanco.model.Cliente;
-import com.everis.desafioBanco.service.ClienteService;
+import com.everis.desafioBanco.Dto.ClienteDto;
+import com.everis.desafioBanco.Model.Cliente;
+import com.everis.desafioBanco.Service.ClienteService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 @RestController
 public class ClienteController {
@@ -32,8 +33,7 @@ public class ClienteController {
     }
 
     @PutMapping("/atualizar-cliente")
-    public ResponseEntity<Cliente> atualizarCliente(@RequestBody @Valid ClienteDto clienteDto,
-                                                    @RequestParam(name = "cpf") String cpf){
+    public ResponseEntity<Cliente> atualizarCliente(@RequestBody @Valid ClienteDto clienteDto, @RequestParam(name = "cpf") String cpf){
         var cliente = clienteService.listarCliente(cpf);
         BeanUtils.copyProperties(clienteDto, cliente);
         clienteService.atualizarCliente(cliente, cpf);

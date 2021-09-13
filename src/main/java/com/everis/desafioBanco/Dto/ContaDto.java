@@ -1,4 +1,4 @@
-package com.everis.desafioBanco.dto;
+package com.everis.desafioBanco.Dto;
 
 import lombok.Data;
 
@@ -21,7 +21,7 @@ public class ContaDto {
     @NotNull
     private Long digitoVerificador;
 
-    @NotBlank
+    @NotNull
     private String tipoDaConta;
 
     @NotNull

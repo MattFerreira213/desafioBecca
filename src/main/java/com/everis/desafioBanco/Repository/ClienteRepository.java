@@ -1,6 +1,6 @@
-package com.everis.desafioBanco.repository;
+package com.everis.desafioBanco.Repository;
 
-import com.everis.desafioBanco.model.Cliente;
+import com.everis.desafioBanco.Model.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
