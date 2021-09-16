@@ -2,6 +2,7 @@ package com.everis.desafioBanco.Dto;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -16,12 +17,15 @@ public class ContaDto {
     private Long agencia;
 
     @NotNull
+    @Column(name = "numero_da_conte")
     private Long numeroDaConta;
 
     @NotNull
+    @Column(name = "digito_verificador")
     private Long digitoVerificador;
 
     @NotNull
+    @Column(name = "tipo_da_conta")
     private String tipoDaConta;
 
     @NotNull

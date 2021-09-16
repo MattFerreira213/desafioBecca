@@ -3,6 +3,8 @@ package com.everis.desafioBanco.Controller;
 import com.everis.desafioBanco.Dto.ClienteDto;
 import com.everis.desafioBanco.Model.Cliente;
 import com.everis.desafioBanco.Service.ClienteService;
+import com.everis.desafioBanco.Utils.Exceptions.ClienteJaCadastradoException;
+import com.everis.desafioBanco.Utils.Exceptions.CpfNaoEncontradoException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,31 +21,47 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping("/cadastrar-cliente")
-    public ResponseEntity<Cliente> cadastrarClienet(@RequestBody @Valid ClienteDto clienteDto){
-        Cliente dadosCliente = new Cliente();
-        BeanUtils.copyProperties(clienteDto, dadosCliente);
-        clienteService.cadastrarCliente(dadosCliente);
-        return new ResponseEntity<>(dadosCliente, HttpStatus.CREATED);
+    public ResponseEntity<?> cadastrarClienet(@RequestBody @Valid ClienteDto clienteDto) {
+        try{
+            Cliente dadosCliente = new Cliente();
+            BeanUtils.copyProperties(clienteDto, dadosCliente);
+            clienteService.cadastrarCliente(dadosCliente);
+            return ResponseEntity.status(HttpStatus.CREATED).body(dadosCliente);
+        } catch (ClienteJaCadastradoException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/listar-cliente")
-    public ResponseEntity<Cliente> listarCLiente(@RequestParam(name = "cpf") String cpf){
-        var cliente = clienteService.listarCliente(cpf);
-        return new ResponseEntity<>(cliente, HttpStatus.OK);
+    public ResponseEntity<?> listarCLiente(@RequestParam(name = "cpf") String cpf){
+        try {
+            var cliente = clienteService.listarCliente(cpf);
+            return ResponseEntity.ok(cliente);
+        } catch (CpfNaoEncontradoException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
     @PutMapping("/atualizar-cliente")
-    public ResponseEntity<Cliente> atualizarCliente(@RequestBody @Valid ClienteDto clienteDto, @RequestParam(name = "cpf") String cpf){
-        var cliente = clienteService.listarCliente(cpf);
-        BeanUtils.copyProperties(clienteDto, cliente);
-        clienteService.atualizarCliente(cliente, cpf);
-        return new ResponseEntity<>(cliente, HttpStatus.OK);
+    public ResponseEntity<?> atualizarCliente(@RequestBody @Valid ClienteDto clienteDto, @RequestParam(name = "cpf") String cpf){
+        try {
+            var cliente = clienteService.listarCliente(cpf);
+            BeanUtils.copyProperties(clienteDto, cliente);
+            clienteService.atualizarCliente(cliente, cpf);
+            return ResponseEntity.ok(cliente);
+        } catch (CpfNaoEncontradoException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
     @DeleteMapping("/deletar-cliente")
     public ResponseEntity<?> deletarCliente(@RequestParam(name = "cpf") String cpf){
-        clienteService.deletarCliente(cpf);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        try{
+            clienteService.deletarCliente(cpf);
+            return ResponseEntity.ok("Cliente deletado com sucesso.");
+        } catch (CpfNaoEncontradoException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
 }

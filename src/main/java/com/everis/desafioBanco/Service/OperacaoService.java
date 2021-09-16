@@ -16,7 +16,6 @@ public class OperacaoService {
 
     public String sacar(Long numeroDaConta, double valorDeSaque) {
 
-
         var conta = contaRepository.findContaByNumeroDaConta(numeroDaConta);
         var valorSaldo = conta.getSaldo().doubleValue();
 

@@ -12,9 +12,6 @@ public class ContaService {
     @Autowired
     private ContaRepository contaRepository;
 
-    @Autowired
-    private ClienteRepository clienteRepository;
-
     public void cadastrarConta(Conta conta) {
         Conta dadosConta = new Conta();
 
