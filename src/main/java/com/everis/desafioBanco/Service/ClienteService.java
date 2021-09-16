@@ -2,11 +2,10 @@ package com.everis.desafioBanco.Service;
 
 import com.everis.desafioBanco.Model.Cliente;
 import com.everis.desafioBanco.Repository.ClienteRepository;
-import com.everis.desafioBanco.Utils.Exceptions.ClienteJaCadastradoException;
+import com.everis.desafioBanco.Utils.Exceptions.ClienteExistenteException;
 import com.everis.desafioBanco.Utils.Exceptions.CpfNaoEncontradoException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,7 +16,7 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    private static Optional<Cliente> verificarcadastroCliente;
+    private static Optional<Cliente> verificarExistenciaDoCliente;
 
     public void cadastrarCliente(Cliente cliente) {
 
@@ -27,21 +26,21 @@ public class ClienteService {
         dadosCliente.setTelefone(cliente.getTelefone());
         dadosCliente.setEndereco(cliente.getEndereco());
 
-        verificarcadastroCliente = Optional.ofNullable(clienteRepository.findClienteByCpf(dadosCliente.getCpf()));
+        verificarExistenciaDoCliente = Optional.ofNullable(clienteRepository.findClienteByCpf(dadosCliente.getCpf()));
 
-        if (!verificarcadastroCliente.isPresent()) {
+        if (!verificarExistenciaDoCliente.isPresent()) {
             clienteRepository.save(dadosCliente);
         } else {
-            throw new ClienteJaCadastradoException("Esse cliente já possui um cadastro");
+            throw new ClienteExistenteException("Esse cpf já está cadastrado");
         }
     }
 
     public Cliente listarCliente(String cpf) {
         var cliente = clienteRepository.findClienteByCpf(cpf);
 
-        verificarcadastroCliente = Optional.ofNullable(cliente);
+        verificarExistenciaDoCliente = Optional.ofNullable(cliente);
 
-        if (verificarcadastroCliente.isPresent()) {
+        if (verificarExistenciaDoCliente.isPresent()) {
             return cliente;
         } else {
             throw new CpfNaoEncontradoException(
@@ -53,9 +52,9 @@ public class ClienteService {
         var dadosAtualcliente = clienteRepository.findClienteByCpf(cpf);
         BeanUtils.copyProperties(dadosCliente, dadosAtualcliente);
 
-        verificarcadastroCliente = Optional.ofNullable(dadosAtualcliente);
+        verificarExistenciaDoCliente = Optional.ofNullable(dadosAtualcliente);
 
-        if (verificarcadastroCliente.isPresent()) {
+        if (verificarExistenciaDoCliente.isPresent()) {
             return clienteRepository.save(dadosAtualcliente);
         } else {
             throw new CpfNaoEncontradoException(
@@ -66,14 +65,13 @@ public class ClienteService {
     public void deletarCliente(String cpf) {
         var cliente = clienteRepository.findClienteByCpf(cpf);
 
-        verificarcadastroCliente = Optional.ofNullable(cliente);
+        verificarExistenciaDoCliente = Optional.ofNullable(cliente);
 
-        if (verificarcadastroCliente.isPresent()) {
+        if (verificarExistenciaDoCliente.isPresent()) {
             clienteRepository.delete(cliente);
         } else {
             throw new CpfNaoEncontradoException(
                     String.format("Cliente de cpf %s não encontrado ou não existe.", cpf));
         }
-
     }
 }

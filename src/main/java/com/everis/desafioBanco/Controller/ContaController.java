@@ -3,6 +3,8 @@ package com.everis.desafioBanco.Controller;
 import com.everis.desafioBanco.Dto.ContaDto;
 import com.everis.desafioBanco.Model.Conta;
 import com.everis.desafioBanco.Service.ContaService;
+import com.everis.desafioBanco.Utils.Exceptions.ContaJaExistenteException;
+import com.everis.desafioBanco.Utils.Exceptions.CpfNaoEncontradoException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,22 +20,34 @@ public class ContaController {
     private ContaService contaService;
 
     @PostMapping("/criar-conta")
-    public ResponseEntity<Conta> criarConta(@RequestBody @Valid ContaDto contaDto){
-        Conta dadosConta = new Conta();
-        BeanUtils.copyProperties(contaDto, dadosConta);
-        contaService.cadastrarConta(dadosConta);
-        return new ResponseEntity<>(dadosConta, HttpStatus.CREATED);
+    public ResponseEntity<?> criarConta(@RequestBody @Valid ContaDto contaDto){
+        try {
+            Conta dadosConta = new Conta();
+            BeanUtils.copyProperties(contaDto, dadosConta);
+            contaService.cadastrarConta(dadosConta);
+            return ResponseEntity.status(HttpStatus.CREATED).body(dadosConta);
+        } catch (ContaJaExistenteException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/listar-conta")
-    public ResponseEntity<Conta> listarConta(@RequestParam(name = "cpf") String cpf){
-        var conta = contaService.listarConta(cpf);
-        return new ResponseEntity<>(conta, HttpStatus.OK);
+    public ResponseEntity<?> listarConta(@RequestParam(name = "cpf") String cpf){
+        try {
+            var contas = contaService.listarConta(cpf);
+            return ResponseEntity.ok(contas);
+        } catch (CpfNaoEncontradoException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
     @DeleteMapping("/deletar-conta")
     public ResponseEntity<?> deletarConta(@RequestParam(name = "cpf") String cpf){
-        contaService.deletarConta(cpf);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        try{
+            contaService.deletarConta(cpf);
+            return ResponseEntity.ok().build();
+        }catch (CpfNaoEncontradoException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 }

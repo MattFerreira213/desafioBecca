@@ -1,10 +1,10 @@
 package com.everis.desafioBanco.Utils.Exceptions;
 
-public class ClienteJaCadastradoException extends RuntimeException{
+public class ClienteExistenteException extends RuntimeException{
 
     private static final long serialVersionUID = 1L;
 
-    public ClienteJaCadastradoException(String msg) {
+    public ClienteExistenteException(String msg) {
         super(msg);
     }
 }

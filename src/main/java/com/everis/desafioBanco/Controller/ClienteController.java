@@ -3,7 +3,7 @@ package com.everis.desafioBanco.Controller;
 import com.everis.desafioBanco.Dto.ClienteDto;
 import com.everis.desafioBanco.Model.Cliente;
 import com.everis.desafioBanco.Service.ClienteService;
-import com.everis.desafioBanco.Utils.Exceptions.ClienteJaCadastradoException;
+import com.everis.desafioBanco.Utils.Exceptions.ClienteExistenteException;
 import com.everis.desafioBanco.Utils.Exceptions.CpfNaoEncontradoException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 
 @RestController
 public class ClienteController {
@@ -27,7 +26,7 @@ public class ClienteController {
             BeanUtils.copyProperties(clienteDto, dadosCliente);
             clienteService.cadastrarCliente(dadosCliente);
             return ResponseEntity.status(HttpStatus.CREATED).body(dadosCliente);
-        } catch (ClienteJaCadastradoException ex){
+        } catch (ClienteExistenteException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
