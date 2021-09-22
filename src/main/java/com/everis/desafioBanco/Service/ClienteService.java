@@ -2,8 +2,8 @@ package com.everis.desafioBanco.Service;
 
 import com.everis.desafioBanco.Model.Cliente;
 import com.everis.desafioBanco.Repository.ClienteRepository;
-import com.everis.desafioBanco.Utils.Exceptions.ClienteExistenteException;
-import com.everis.desafioBanco.Utils.Exceptions.CpfNaoEncontradoException;
+import com.everis.desafioBanco.Exceptions.ClienteExistenteException;
+import com.everis.desafioBanco.Exceptions.CpfNaoEncontradoException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,20 +18,20 @@ public class ClienteService {
 
     private static Optional<Cliente> verificarExistenciaDoCliente;
 
-    public void cadastrarCliente(Cliente cliente) {
+    public void cadastrarCliente(Cliente dadosCliente) {
 
-        Cliente dadosCliente = new Cliente();
-        dadosCliente.setNome(cliente.getNome());
-        dadosCliente.setCpf(cliente.getCpf());
-        dadosCliente.setTelefone(cliente.getTelefone());
-        dadosCliente.setEndereco(cliente.getEndereco());
+        dadosCliente.setNome(dadosCliente.getNome());
+        dadosCliente.setCpf(dadosCliente.getCpf());
+        dadosCliente.setTelefone(dadosCliente.getTelefone());
+        dadosCliente.setEndereco(dadosCliente.getEndereco());
 
         verificarExistenciaDoCliente = Optional.ofNullable(clienteRepository.findClienteByCpf(dadosCliente.getCpf()));
 
         if (!verificarExistenciaDoCliente.isPresent()) {
             clienteRepository.save(dadosCliente);
         } else {
-            throw new ClienteExistenteException("Esse cpf já está cadastrado");
+            throw new ClienteExistenteException(
+                    String.format("O cpf %s já possui cadastrado",  dadosCliente.getCpf()));
         }
     }
 
@@ -44,7 +44,7 @@ public class ClienteService {
             return cliente;
         } else {
             throw new CpfNaoEncontradoException(
-                    String.format("Cliente de cpf %s não encontrado ou não existe.", cpf));
+                    String.format("Cliente de cpf %s não encontrado.", cpf));
         }
     }
 
@@ -58,7 +58,7 @@ public class ClienteService {
             return clienteRepository.save(dadosAtualcliente);
         } else {
             throw new CpfNaoEncontradoException(
-                    String.format("Cliente de cpf %s não encontrado ou não existe.", cpf));
+                    String.format("Cliente de cpf %s não encontrado.", cpf));
         }
     }
 
@@ -71,7 +71,7 @@ public class ClienteService {
             clienteRepository.delete(cliente);
         } else {
             throw new CpfNaoEncontradoException(
-                    String.format("Cliente de cpf %s não encontrado ou não existe.", cpf));
+                    String.format("Cliente de cpf %s não encontrado.", cpf));
         }
     }
 }

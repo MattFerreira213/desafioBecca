@@ -3,8 +3,8 @@ package com.everis.desafioBanco.Controller;
 import com.everis.desafioBanco.Dto.ContaDto;
 import com.everis.desafioBanco.Model.Conta;
 import com.everis.desafioBanco.Service.ContaService;
-import com.everis.desafioBanco.Utils.Exceptions.ContaJaExistenteException;
-import com.everis.desafioBanco.Utils.Exceptions.CpfNaoEncontradoException;
+import com.everis.desafioBanco.Exceptions.ContaExistenteException;
+import com.everis.desafioBanco.Exceptions.CpfNaoEncontradoException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class ContaController {
             BeanUtils.copyProperties(contaDto, dadosConta);
             contaService.cadastrarConta(dadosConta);
             return ResponseEntity.status(HttpStatus.CREATED).body(dadosConta);
-        } catch (ContaJaExistenteException ex){
+        } catch (ContaExistenteException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }

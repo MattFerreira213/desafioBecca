@@ -1,5 +1,6 @@
 package com.everis.desafioBanco.Dto;
 
+import com.everis.desafioBanco.Enum.ETipoDeConta;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -30,4 +31,5 @@ public class ContaDto {
 
     @NotNull
     private BigDecimal saldo;
-}
+
+    private int quantidadeDeSaqueSemTaxa;}

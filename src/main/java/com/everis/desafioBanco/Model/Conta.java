@@ -1,5 +1,6 @@
 package com.everis.desafioBanco.Model;
 
+import com.everis.desafioBanco.Enum.ETipoDeConta;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -27,5 +28,8 @@ public class Conta {
     private String tipoDaConta;
 
     private BigDecimal saldo;
+
+    private int quantidadeDeSaqueSemTaxa;
+
 
 }

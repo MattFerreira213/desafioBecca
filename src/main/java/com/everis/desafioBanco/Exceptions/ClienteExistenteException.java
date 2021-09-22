@@ -1,4 +1,4 @@
-package com.everis.desafioBanco.Utils.Exceptions;
+package com.everis.desafioBanco.Exceptions;
 
 public class ClienteExistenteException extends RuntimeException{
 

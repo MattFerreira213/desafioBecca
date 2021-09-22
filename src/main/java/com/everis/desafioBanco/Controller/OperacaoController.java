@@ -1,16 +1,19 @@
 package com.everis.desafioBanco.Controller;
 
+import com.everis.desafioBanco.Dto.OperacaoBancariaDto;
+import com.everis.desafioBanco.Model.OperacaoBancaria;
 import com.everis.desafioBanco.Repository.ContaRepository;
 import com.everis.desafioBanco.Service.OperacaoService;
+import com.everis.desafioBanco.Exceptions.ContaNaoEncontradaException;
+import com.everis.desafioBanco.Exceptions.SaldoInsuficienteException;
+import com.everis.desafioBanco.Exceptions.TransacaoNaoAutorizadaException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+import javax.validation.Valid;
 
 @RestController
 public class OperacaoController {
@@ -21,32 +24,35 @@ public class OperacaoController {
     @Autowired
     private ContaRepository contaRepository;
 
-    @PutMapping("/conta/sacar")
-    public ResponseEntity<String> sacar(@RequestParam(name = "numeroDaConta") Long numeroDaConta,
-                                        @RequestParam(name = "valorDeSaque") double valorDeSaque) {
-        var conta = operacaoService.sacar(numeroDaConta, valorDeSaque);
-        return new ResponseEntity<>(conta, HttpStatus.OK);
+    @PostMapping("/conta/sacar")
+    public ResponseEntity<?> sacar(@RequestBody @Valid OperacaoBancariaDto operacaoBancariaDto) {
+        OperacaoBancaria operacaoBancaria = new OperacaoBancaria();
+        BeanUtils.copyProperties(operacaoBancariaDto, operacaoBancaria);
+        operacaoService.sacar(operacaoBancaria);
+        return ResponseEntity.ok().body("Saque efetuado com sucesso");
     }
 
-    @PutMapping("/conta/depositar")
-    public ResponseEntity<String> depositar(@RequestParam(name = "numeroDaConta") Long numeroDaConta,
-                                            @RequestParam(name = "valorDeDeposito") double valorDeDeposito) {
-        var conta = operacaoService.depositar(numeroDaConta, valorDeDeposito);
-        return new ResponseEntity<>(conta, HttpStatus.OK);
+    @PostMapping("/conta/depositar")
+    public ResponseEntity<?> depositar(@RequestBody @Valid OperacaoBancariaDto operacaoBancariaDto) {
+        OperacaoBancaria operacaoBancaria = new OperacaoBancaria();
+        BeanUtils.copyProperties(operacaoBancariaDto, operacaoBancaria);
+        operacaoService.sacar(operacaoBancaria);
+        return ResponseEntity.ok().body("Deposito efetuado com sucesso");
     }
 
-    @GetMapping("/conta/consultar-saldo")
-    public ResponseEntity<BigDecimal> consultarSaldoDaConta(@RequestParam(name = "numeroDaConta") Long numeroDaConta) {
-        var saldoConta = operacaoService.consultarSaldo(numeroDaConta);
-        return new ResponseEntity<>(saldoConta, HttpStatus.OK);
-    }
-
-    @PutMapping("/conta/transferencia")
-    public ResponseEntity<String> tranferencia(@RequestParam(name = "numeroDaContaOrigem") Long numeroDaContaO,
-                                               @RequestParam(name = "numeroDaContaDestino") Long numeroDaContaD,
-                                               @RequestParam(name = "valorDeTransferencia") double valorDeTransferencia) {
-
-        var response = operacaoService.tranferir(numeroDaContaO, numeroDaContaD, valorDeTransferencia);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+//    @GetMapping("/conta/consultar-saldo")
+//    public ResponseEntity<?> consultarSaldoDaConta(@RequestParam(name = "numeroDaConta") Long numeroDaConta) {
+//        try {
+//            var saldoConta = operacaoService.consultarSaldo(numeroDaConta);
+//            return new ResponseEntity<>(saldoConta, HttpStatus.OK);
+//        } catch (ContaNaoEncontradaException ex){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+//        }
+//    }
+//
+    @PostMapping("/conta/transferencia")
+    public ResponseEntity<?> tranferencia(@RequestBody @Valid OperacaoBancaria operacaoBancaria) {
+        operacaoService.tranferir(operacaoBancaria);
+        return ResponseEntity.ok().body("Transação realizada com sucesso");
     }
 }

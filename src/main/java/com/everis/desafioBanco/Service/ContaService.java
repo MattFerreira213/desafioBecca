@@ -4,9 +4,8 @@ import com.everis.desafioBanco.Model.Cliente;
 import com.everis.desafioBanco.Model.Conta;
 import com.everis.desafioBanco.Repository.ClienteRepository;
 import com.everis.desafioBanco.Repository.ContaRepository;
-import com.everis.desafioBanco.Utils.Exceptions.ContaJaExistenteException;
-import com.everis.desafioBanco.Utils.Exceptions.CpfNaoEncontradoException;
-import jdk.dynalink.linker.LinkerServices;
+import com.everis.desafioBanco.Exceptions.ContaExistenteException;
+import com.everis.desafioBanco.Exceptions.CpfNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,26 +21,26 @@ public class ContaService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public void cadastrarConta(Conta conta) {
-        Conta dadosConta = new Conta();
+    public void cadastrarConta(Conta dadosDaConta) {
 
-        dadosConta.setAgencia(conta.getAgencia());
-        dadosConta.setCpf(conta.getCpf());
-        dadosConta.setNumeroDaConta(conta.getNumeroDaConta());
-        dadosConta.setDigitoVerificador(conta.getDigitoVerificador());
-        dadosConta.setTipoDaConta(conta.getTipoDaConta());
-        dadosConta.setSaldo(conta.getSaldo());
+        dadosDaConta.setAgencia(dadosDaConta.getAgencia());
+        dadosDaConta.setCpf(dadosDaConta.getCpf());
+        dadosDaConta.setNumeroDaConta(dadosDaConta.getNumeroDaConta());
+        dadosDaConta.setDigitoVerificador(dadosDaConta.getDigitoVerificador());
+        dadosDaConta.setTipoDaConta(dadosDaConta.getTipoDaConta());
+        dadosDaConta.setSaldo(dadosDaConta.getSaldo());
+        dadosDaConta.setQuantidadeDeSaqueSemTaxa(5);
 
         Optional<Cliente> verificarCpfDaConta = Optional.ofNullable(
-                clienteRepository.findClienteByCpf(conta.getCpf()));
+                clienteRepository.findClienteByCpf(dadosDaConta.getCpf()));
 
         Optional<Conta> verificarExistenciaDeConta = Optional.ofNullable(
-                contaRepository.findContaByNumeroDaConta(dadosConta.getNumeroDaConta()));
+                contaRepository.findContaByNumeroDaConta(dadosDaConta.getNumeroDaConta()));
 
         if (verificarCpfDaConta.isPresent() && !verificarExistenciaDeConta.isPresent()){
-            contaRepository.save(dadosConta);
+            contaRepository.save(dadosDaConta);
         } else {
-            throw new ContaJaExistenteException("Número da conta em uso ou cpf não encontrado.");
+            throw new ContaExistenteException("Número da conta em uso ou cpf não encontrado.");
         }
 
     }
