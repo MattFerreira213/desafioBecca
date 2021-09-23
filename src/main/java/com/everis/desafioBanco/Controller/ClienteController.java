@@ -3,7 +3,6 @@ package com.everis.desafioBanco.Controller;
 import com.everis.desafioBanco.Dto.ClienteDto;
 import com.everis.desafioBanco.Model.Cliente;
 import com.everis.desafioBanco.Service.ClienteService;
-import com.everis.desafioBanco.Exceptions.CpfNaoEncontradoException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,22 +1,28 @@
 package com.everis.desafioBanco.Dto;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
 public class ClienteDto {
 
-    @NotBlank
+    @NotBlank(message = "Campo nome deve ser informado.")
     private String nome;
 
-    @NotBlank
+    @CPF(message = "Formato de CPF inválido.")
     private String cpf;
 
-    @NotBlank
+    @NotBlank(message = "Campo telefone deve ser informado.")
     private String telefone;
 
-    @NotBlank
+    @NotBlank(message = "Campo endereço deve ser informado.")
     private String endereco;
+
+
+
+
+
 
 }

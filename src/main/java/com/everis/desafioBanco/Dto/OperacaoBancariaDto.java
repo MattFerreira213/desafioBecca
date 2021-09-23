@@ -12,7 +12,6 @@ public class OperacaoBancariaDto {
     @NotNull
     private Long numeroDaConta;
 
-    @NotNull
     private Long numeroDaContaDestino;
 
     @NotNull

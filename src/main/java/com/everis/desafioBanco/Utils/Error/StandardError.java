@@ -1,8 +1,7 @@
-package com.everis.desafioBanco.Exceptions;
+package com.everis.desafioBanco.Utils.Error;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @AllArgsConstructor

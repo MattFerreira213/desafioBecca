@@ -2,8 +2,8 @@ package com.everis.desafioBanco.Service;
 
 import com.everis.desafioBanco.Model.Cliente;
 import com.everis.desafioBanco.Repository.ClienteRepository;
-import com.everis.desafioBanco.Exceptions.ClienteExistenteException;
-import com.everis.desafioBanco.Exceptions.CpfNaoEncontradoException;
+import com.everis.desafioBanco.Utils.Exceptions.ClienteExistenteException;
+import com.everis.desafioBanco.Utils.Exceptions.CpfNaoEncontradoException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

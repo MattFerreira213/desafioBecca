@@ -4,8 +4,8 @@ import com.everis.desafioBanco.Model.Cliente;
 import com.everis.desafioBanco.Model.Conta;
 import com.everis.desafioBanco.Repository.ClienteRepository;
 import com.everis.desafioBanco.Repository.ContaRepository;
-import com.everis.desafioBanco.Exceptions.ContaExistenteException;
-import com.everis.desafioBanco.Exceptions.CpfNaoEncontradoException;
+import com.everis.desafioBanco.Utils.Exceptions.ContaExistenteException;
+import com.everis.desafioBanco.Utils.Exceptions.CpfNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class ContaService {
         dadosDaConta.setDigitoVerificador(dadosDaConta.getDigitoVerificador());
         dadosDaConta.setTipoDaConta(dadosDaConta.getTipoDaConta());
         dadosDaConta.setSaldo(dadosDaConta.getSaldo());
-        dadosDaConta.setQuantidadeDeSaqueSemTaxa(5);
+
 
         Optional<Cliente> verificarCpfDaConta = Optional.ofNullable(
                 clienteRepository.findClienteByCpf(dadosDaConta.getCpf()));
@@ -38,6 +38,14 @@ public class ContaService {
                 contaRepository.findContaByNumeroDaConta(dadosDaConta.getNumeroDaConta()));
 
         if (verificarCpfDaConta.isPresent() && !verificarExistenciaDeConta.isPresent()){
+            var tipoConta = dadosDaConta.getTipoDaConta();
+            if (tipoConta.equals("Pessoa Fisica")){
+                dadosDaConta.setQuantidadeDeSaqueSemTaxa(5);
+            }else if (tipoConta.equals("Pessoa Juridica")){
+                dadosDaConta.setQuantidadeDeSaqueSemTaxa(50);
+            } else if (tipoConta.equals("Governamental")){
+                dadosDaConta.setQuantidadeDeSaqueSemTaxa(250);
+            }
             contaRepository.save(dadosDaConta);
         } else {
             throw new ContaExistenteException("Número da conta em uso ou cpf não encontrado.");

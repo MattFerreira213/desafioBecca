@@ -1,6 +1,5 @@
 package com.everis.desafioBanco.Dto;
 
-import com.everis.desafioBanco.Enum.ETipoDeConta;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -11,17 +10,17 @@ import java.math.BigDecimal;
 @Data
 public class ContaDto {
 
-    @NotBlank
+    @NotBlank(message = "Campo CPF deve ser informado.")
     private String cpf;
 
-    @NotNull
+    @NotNull(message = "Campo agencia deve ser informado.")
     private Long agencia;
 
-    @NotNull
+    @NotNull(message = "Campo numeroDaConta deve ser informado.")
     @Column(name = "numero_da_conte")
     private Long numeroDaConta;
 
-    @NotNull
+    @NotNull(message = "Campo digitoVerificador deve ser informado.")
     @Column(name = "digito_verificador")
     private Long digitoVerificador;
 
@@ -29,7 +28,7 @@ public class ContaDto {
     @Column(name = "tipo_da_conta")
     private String tipoDaConta;
 
-    @NotNull
+    @NotNull(message = "Campo saldo deve ser informado.")
     private BigDecimal saldo;
 
     private int quantidadeDeSaqueSemTaxa;}
