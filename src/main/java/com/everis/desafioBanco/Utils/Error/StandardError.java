@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class StandardError {
 
-    private String menssagem;
+    private String mensagem;
 }

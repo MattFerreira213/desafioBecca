@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 public class ClienteController {
@@ -42,7 +43,8 @@ public class ClienteController {
     @DeleteMapping("/deletar-cliente")
     public ResponseEntity<?> deletarCliente(@RequestParam(name = "cpf") String cpf) {
         clienteService.deletarCliente(cpf);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Cliente deletado com sucesso.");
+        Map.Entry<String, String> mensagem = Map.entry("mensagem", "Cliente deletado com sucesso");
+        return ResponseEntity.status(HttpStatus.OK).body(mensagem);
 
     }
 

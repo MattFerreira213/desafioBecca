@@ -1,8 +1,11 @@
 package com.everis.desafioBanco.Dto;
 
+import com.everis.desafioBanco.Enum.ETipoDeConta;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -26,9 +29,9 @@ public class ContaDto {
 
     @NotNull
     @Column(name = "tipo_da_conta")
-    private String tipoDaConta;
+    @Enumerated(EnumType.STRING)
+    private ETipoDeConta tipoDaConta;
 
     @NotNull(message = "Campo saldo deve ser informado.")
     private BigDecimal saldo;
-
-    private int quantidadeDeSaqueSemTaxa;}
+}

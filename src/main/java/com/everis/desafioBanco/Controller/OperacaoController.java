@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 public class OperacaoController {
@@ -25,8 +26,8 @@ public class OperacaoController {
     public ResponseEntity<?> sacar(@RequestBody @Valid OperacaoBancariaDto operacaoBancariaDto) {
         OperacaoBancaria operacaoBancaria = new OperacaoBancaria();
         BeanUtils.copyProperties(operacaoBancariaDto, operacaoBancaria);
-        operacaoService.sacar(operacaoBancaria);
-        return ResponseEntity.ok().body("Saque efetuado com sucesso");
+        var msg = operacaoService.sacar(operacaoBancaria);
+        return ResponseEntity.status(HttpStatus.CREATED).body(msg);
     }
 
     @PostMapping("/conta/depositar")
@@ -34,7 +35,8 @@ public class OperacaoController {
         OperacaoBancaria operacaoBancaria = new OperacaoBancaria();
         BeanUtils.copyProperties(operacaoBancariaDto, operacaoBancaria);
         operacaoService.depositar(operacaoBancaria);
-        return ResponseEntity.ok().body("Deposito efetuado com sucesso");
+        var mensagem = Map.entry("mensagem", "Deposito efetuado com sucesso");
+        return ResponseEntity.status(HttpStatus.CREATED).body(mensagem);
     }
 
     @PostMapping("/conta/transferencia")
@@ -42,13 +44,14 @@ public class OperacaoController {
         OperacaoBancaria operacaoBancaria = new OperacaoBancaria();
         BeanUtils.copyProperties(operacaoBancariaDto, operacaoBancaria);
         operacaoService.tranferir(operacaoBancaria);
-        return ResponseEntity.ok().body("Transação realizada com sucesso");
+        var mensagem = Map.entry("mensagem", "Transação realizada com sucesso");
+        return ResponseEntity.status(HttpStatus.CREATED).body(mensagem);
     }
 
     @GetMapping("/conta/consultar-saldo")
     public ResponseEntity<?> consultarSaldoDaConta(@RequestParam(name = "numeroDaConta") Long numeroDaConta) {
         var saldoConta = operacaoService.consultarSaldo(numeroDaConta);
-        return new ResponseEntity<>(saldoConta, HttpStatus.OK);
+        return ResponseEntity.ok().body(saldoConta);
     }
 
     @GetMapping("/conta/extrato")

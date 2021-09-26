@@ -22,9 +22,9 @@ public class OperacaoBancaria {
 
     private Long numeroDaContaDestino;
 
-    private BigDecimal valor;
+    private BigDecimal valorDeTransacao;
 
-    private int taxa;
+    private BigDecimal taxa;
 
     private EOperacao tipoOperacao;
 }

@@ -25,11 +25,13 @@ public class Conta {
 
     private Long digitoVerificador;
 
-    private String tipoDaConta;
+    private ETipoDeConta tipoDaConta;
 
     private BigDecimal saldo;
 
     private int quantidadeDeSaqueSemTaxa;
+
+    private String aviso;
 
 
 }

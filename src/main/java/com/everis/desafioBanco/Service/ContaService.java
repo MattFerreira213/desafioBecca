@@ -1,5 +1,6 @@
 package com.everis.desafioBanco.Service;
 
+import com.everis.desafioBanco.Enum.ETipoDeConta;
 import com.everis.desafioBanco.Model.Cliente;
 import com.everis.desafioBanco.Model.Conta;
 import com.everis.desafioBanco.Repository.ClienteRepository;
@@ -39,12 +40,21 @@ public class ContaService {
 
         if (verificarCpfDaConta.isPresent() && !verificarExistenciaDeConta.isPresent()){
             var tipoConta = dadosDaConta.getTipoDaConta();
-            if (tipoConta.equals("Pessoa Fisica")){
+            if (tipoConta == ETipoDeConta.PESSOA_FISICA){
                 dadosDaConta.setQuantidadeDeSaqueSemTaxa(5);
-            }else if (tipoConta.equals("Pessoa Juridica")){
+                dadosDaConta.setAviso(String.format("Caro cliente, você possui %d saques mensais gratuitos. " +
+                        "Ao atingir limite, será cobrado uma taxa no valor de R$10,00", dadosDaConta.getQuantidadeDeSaqueSemTaxa()));
+                dadosDaConta.setTipoDaConta(ETipoDeConta.PESSOA_FISICA);
+            }else if (tipoConta == ETipoDeConta.PESSOA_JURIDICA){
                 dadosDaConta.setQuantidadeDeSaqueSemTaxa(50);
-            } else if (tipoConta.equals("Governamental")){
+                dadosDaConta.setAviso(String.format("Caro cliente, você possui %d saques mensais gratuitos. " +
+                        "Ao atingir limite, será cobrado uma taxa no valor de R$10,00", dadosDaConta.getQuantidadeDeSaqueSemTaxa()));
+                dadosDaConta.setTipoDaConta(ETipoDeConta.PESSOA_JURIDICA);
+            } else if (tipoConta == ETipoDeConta.GOVERNAMENTAL){
                 dadosDaConta.setQuantidadeDeSaqueSemTaxa(250);
+                dadosDaConta.setAviso(String.format("Caro cliente, você possui %d saques mensais gratuitos. " +
+                        "Ao atingir limite, será cobrado uma taxa no valor de R$20,00", dadosDaConta.getQuantidadeDeSaqueSemTaxa()));
+                dadosDaConta.setTipoDaConta(ETipoDeConta.GOVERNAMENTAL);
             }
             contaRepository.save(dadosDaConta);
         } else {

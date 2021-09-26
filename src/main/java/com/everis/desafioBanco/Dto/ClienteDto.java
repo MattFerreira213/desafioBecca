@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Data
 public class ClienteDto {
@@ -11,10 +12,11 @@ public class ClienteDto {
     @NotBlank(message = "Campo nome deve ser informado.")
     private String nome;
 
-    @CPF(message = "Formato de CPF inválido.")
+    @CPF(message = "Formato de CPF inválido. Insira os 11 dígitos do cpf sem ponto e sem traço.")
     private String cpf;
 
-    @NotBlank(message = "Campo telefone deve ser informado.")
+    @Pattern(regexp= "(\\(\\d{2}\\)\\s)(\\d{4,5}\\-\\d{4})",
+            message = "Verificar formato de telefone. (DD) 9XXX-XXXX ou (DD) XXXX-XXXX")
     private String telefone;
 
     @NotBlank(message = "Campo endereço deve ser informado.")

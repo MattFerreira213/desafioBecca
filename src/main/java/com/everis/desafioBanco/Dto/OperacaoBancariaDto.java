@@ -12,12 +12,8 @@ public class OperacaoBancariaDto {
     @NotNull
     private Long numeroDaConta;
 
-    private Long numeroDaContaDestino;
-
     @NotNull
-    private BigDecimal valor;
-
-    private int taxa;
+    private BigDecimal valorDeTransacao;
 
     private EOperacao tipoOperacao;
 }
